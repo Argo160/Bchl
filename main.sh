@@ -76,7 +76,6 @@ DVHOST_CLOUD_MAIN(){
         ;;
         3)
             rm -rf backhaul config.toml /etc/systemd/system/backhaul.service
-
             sudo systemctl daemon-reload
 
         ;;
@@ -126,7 +125,7 @@ DVHOST_CLOUD_check_status() {
 
 DVHOST_CLOUD_TUNNEL(){
     clear
-    DVHOST_CLOUD_menu "| 1  - IRAN \n| 2  - KHAREJ  \n| 3 - Remove \n| 0  - Exit"
+    DVHOST_CLOUD_menu "| 1  - IRAN \n| 2  - KHAREJ  \n| 0  - Exit"
     read -p "Enter your choice: " choice
     
     case $choice in
@@ -190,10 +189,6 @@ EOL
             read -p "Do you want nodelay (true/false) ? " nodelay
 			read -p "Please enter Remote IP : " remote_ip
 
-
-
-
-
 cat <<EOL > config.toml
 [client]
 remote_addr = "${remote_ip}:3080"
@@ -206,13 +201,10 @@ log_level = "info"
 mux_session = 1
 EOL
 
-        backhaul -c config.toml
+        # backhaul -c config.toml
 
         create_backhaul_service
 
-        ;;
-        3)
-            rm config.toml
         ;;
         0)
             echo -e "${GREEN}Exiting program...${NC}"
@@ -228,7 +220,6 @@ EOL
 
 IRAN_PORTS() {
     ports=()
-
     for ((i=1; i<=$1; i++))
     do
         read -p "Enter LocalPort for mapping $i: " local_port
@@ -237,31 +228,7 @@ IRAN_PORTS() {
 
         ports+=("$local_port=$remote_port")
     done
-
     echo "ports = ["
-    for port in "${ports[@]}"
-    do
-        echo "   \"$port\","
-    done
-    echo "]"
-}
-
-
-KHAREJ_PORT() {
-    ports=()
-
-    for ((i=1; i<=$1; i++))
-    do
-        read -p "Enter IP for mapping $i: " ip
-
-        read -p "Enter LocalPort for mapping $i: " local_port
-
-        read -p "Enter RemotePort for mapping $i: " remote_port
-
-        ports+=("$local_port=$ip:$remote_port")
-    done
-
-    echo "forwarder = ["
     for port in "${ports[@]}"
     do
         echo "   \"$port\","
