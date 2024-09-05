@@ -75,8 +75,10 @@ DVHOST_CLOUD_MAIN(){
             DVHOST_CLOUD_TUNNEL
         ;;
         3)
-            rm -rf /usr/bin/backhaul
-            rm config.toml
+            rm -rf backhaul config.toml /etc/systemd/system/backhaul.service
+
+            sudo systemctl daemon-reload
+
         ;;
         0)
             echo -e "${GREEN}Exiting program...${NC}"
