@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${RED}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
 
-DVHOST_CLOUD_install_jq() {
+install_jq() {
     if ! command -v jq &> /dev/null; then
         if command -v apt-get &> /dev/null; then
             echo -e "${RED}jq is not installed. Installing...${NC}"
@@ -24,8 +24,8 @@ DVHOST_CLOUD_install_jq() {
     fi
 }
 
-DVHOST_CLOUD_require_command(){
-    DVHOST_CLOUD_install_jq
+require_command(){
+    install_jq
     if ! command -v pv &> /dev/null; then
         echo "pv could not be found, installing it..."
         sudo apt update
@@ -33,23 +33,13 @@ DVHOST_CLOUD_require_command(){
     fi
 }
 
-DVHOST_CLOUD_menu(){
+menu(){
     clear
     SERVER_IP=$(hostname -I | awk '{print $1}')
     SERVER_COUNTRY=$(curl -sS "http://ip-api.com/json/$SERVER_IP" | jq -r '.country')
     SERVER_ISP=$(curl -sS "http://ip-api.com/json/$SERVER_IP" | jq -r '.isp')
-    BACK_CORE=$(DVHOST_CLOUD_check_status)
-    echo "+--------------------------------------------------------------------------------------------------------------------------------------+"                                                                                                
-    echo "| ######     ###      ####   ### ###   ##  ##    ###    ##   ##  ####      ######  ##   ##  ##   ##  ##   ##  #######  ####            |"
-    echo "|  ##  ##   ## ##    ##  ##   ## ##    ##  ##   ## ##   ##   ##   ##      #### ##  ##   ##  ###  ##  ###  ##   ##   #   ##             |"
-    echo "|  ##  ##  ##   ##  ##        ####     ##  ##  ##   ##  ##   ##   ##         ##    ##   ##  #### ##  #### ##   ##       ##             |"
-    echo "|  #####   ##   ##  ##        ###      ######  ##   ##  ##   ##   ##         ##    ##   ##  #######  #######   ####     ##             |"
-    echo "|  ##  ##  #######  ##        ####     ##  ##  #######  ##   ##   ##         ##    ##   ##  ## ####  ## ####   ##       ##             |"
-    echo "|  ##  ##  ##   ##   ##  ##   ## ##    ##  ##  ##   ##  ##   ##   ##  ##     ##    ##   ##  ##  ###  ##  ###   ##   #   ##  ##         |"
-    echo "| ######   ##   ##    ####   ### ###   ##  ##  ##   ##   #####   #######    ####    #####   ##   ##  ##   ##  #######  ####### ( 0.4 ) |"
-    echo "+--------------------------------------------------------------------------------------------------------------------------------------+"                                                                                                
-    echo -e "|  Telegram Channel : ${GREEN}@DVHOST_CLOUD ${NC}                              |   YouTube : ${RED}youtube.com/@dvhost_cloud${NC}"
-    echo "+--------------------------------------------------------------------------------------------------------------------------------------+"                                                                                                
+    BACK_CORE=$(check_status)
+    echo "+--------------------------------------------------------------------------------------------------------------------------------------+"                                                                                                                                                                                        
     echo -e "|${GREEN}Server Country    |${NC} $SERVER_COUNTRY"
     echo -e "|${GREEN}Server IP         |${NC} $SERVER_IP"
     echo -e "|${GREEN}Server ISP        |${NC} $SERVER_ISP"
@@ -62,17 +52,17 @@ DVHOST_CLOUD_menu(){
     echo -e "\033[0m"
 }
 
-DVHOST_CLOUD_MAIN(){
+MAIN(){
     clear
-    DVHOST_CLOUD_menu "| 1  - Install Backhaul Core \n| 2  - Setup Tunnel \n| 3  - Unistall \n| 0  - Exit"
+    menu "| 1  - Install Backhaul Core \n| 2  - Setup Tunnel \n| 3  - Unistall \n| 0  - Exit"
     read -p "Enter your choice: " choice
     
     case $choice in
         1)
-            DVHOST_CLOUD_BACKCORE
+            BACKCORE
         ;;
         2)
-            DVHOST_CLOUD_TUNNEL
+            TUNNEL
         ;;
         3)
             rm -rf backhaul config.toml /etc/systemd/system/backhaul.service
@@ -91,7 +81,7 @@ DVHOST_CLOUD_MAIN(){
 }
 
 
-DVHOST_CLOUD_BACKCORE(){
+BACKCORE(){
 
     ## Download from github
     wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz
@@ -109,13 +99,13 @@ DVHOST_CLOUD_BACKCORE(){
     clear
 
     echo $'\e[32m Backhaul Core in 3 seconds... \e[0m' && sleep 1 && echo $'\e[32m2... \e[0m' && sleep 1 && echo $'\e[32m1... \e[0m' && sleep 1 && {
-        DVHOST_CLOUD_MAIN
+        MAIN
     }    
     
 }
 
 
-DVHOST_CLOUD_check_status() {
+check_status() {
     if [ -e /usr/bin/backhaul ]; then
         echo -e ${GREEN}"installed"${NC}
     else
@@ -123,9 +113,9 @@ DVHOST_CLOUD_check_status() {
     fi
 }
 
-DVHOST_CLOUD_TUNNEL(){
+TUNNEL(){
     clear
-    DVHOST_CLOUD_menu "| 1  - IRAN \n| 2  - KHAREJ  \n| 0  - Exit"
+    menu "| 1  - IRAN \n| 2  - KHAREJ  \n| 0  - Exit"
     read -p "Enter your choice: " choice
     
     case $choice in
@@ -263,5 +253,5 @@ create_backhaul_service() {
     echo "backhaul.service created and started."
 }
 
-DVHOST_CLOUD_require_command
-DVHOST_CLOUD_MAIN
+require_command
+MAIN
