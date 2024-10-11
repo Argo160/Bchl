@@ -1,4 +1,4 @@
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/Argo160/Backhaul-Tunnel/master/main.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Argo160/Bchl/master/main.sh)
 ```
