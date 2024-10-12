@@ -2,12 +2,12 @@ CORE(){
     mkdir backhaul
     cd backhaul
     if [[ "$(uname -m)" == "x86_64" ]]; then
-        wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz
+        wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz -O backhaul_linux.tar.gz
     elif [[ "$(uname -m)" == "aarch64" ]]; then
-        wget https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz
+        wget https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz -O backhaul_linux.tar.gz
     fi    
-    tar -xzvf backhaul_linux_amd64.tar.gz
-    rm backhaul_linux_amd64.tar.gz
+    tar -xzvf backhaul_linux.tar.gz
+    rm backhaul_linux.tar.gz
     chmod +x backhaul
     mv backhaul /usr/bin/backhaul
     clear
@@ -16,6 +16,8 @@ CORE(){
 }
 
 # Main menu
+# check root
+[[ $EUID -ne 0 ]] && echo -e "${RED}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
 while true; do
 clear
     echo "Menu:"
