@@ -145,14 +145,16 @@ ports=$(IRAN_PORTS "$port_count")
 
 cat <<EOL > config.toml
 [server]# Local, IRAN
-bind_addr = "0.0.0.0:3080"
+bind_addr = "0.0.0.0:8080"
 transport = "${protocol}"
 token = "${token}"
-nodelay = ${nodelay}
-keepalive_period = 20
 channel_size = 2048
-connection_pool = 16
-mux_session = 1
+keepalive_period = 75
+heartbeat = 40
+nodelay = ${nodelay}
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
 log_level = "info"
 ${ports}
 EOL
@@ -181,14 +183,18 @@ EOL
 
 cat <<EOL > config.toml
 [client]
-remote_addr = "${remote_ip}:3080"
+remote_addr = "${remote_ip}:8080"
 transport = "${protocol}"
 token = "${token}"
+connection_pool = 8
+keepalive_period = 75
+dial_timeout = 10
+retry_interval = 3
 nodelay = ${nodelay}
-keepalive_period = 20
-retry_interval = 1
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
 log_level = "info"
-mux_session = 1
 EOL
 
         # backhaul -c config.toml
