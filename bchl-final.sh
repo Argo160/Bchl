@@ -15,21 +15,7 @@ CORE(){
     echo $'\e[32m Backhaul Core in 3 seconds... \e[0m' && sleep 1 && echo $'\e[32m2... \e[0m' && sleep 1 && echo $'\e[32m1... \e[0m' && sleep 1 && {
     }    
 }
-TUNNEL(){
-    clear
-    while true; do
-    clear
-        echo "TUNNEL SETUP"
-        echo "1  - This is Iran"
-        echo "2  - This is Kharej"
-        echo "3  - Return"
-        case $choice in
-            1) Iran_bc;;
-            2) Kharej_bc;;
-            3) Break;;
-        esac
-    done
-}
+
 Kharej_bc() {
     clear
     protocol_selection
@@ -51,7 +37,20 @@ clear
     read -p "Enter your choice: " choice
     case $choice in
         1) CORE;;
-        2) TUNNEL;;
+        2) #TUNNEL
+            while true; do
+                clear
+                echo "TUNNEL SETUP"
+                echo "1  - This is Iran"
+                echo "2  - This is Kharej"
+                echo "3  - Return"
+                read -p "Enter your choice: " tl_choice
+                case $tl_choice in
+                    1) Iran_bc;;
+                    2) Kharej_bc;;
+                    3) Break;;
+                esac
+            done;;
         3) UNINSTALL;;
         0) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
