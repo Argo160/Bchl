@@ -24,13 +24,31 @@ CORE(){
     fi
 }
 tcp-ws() {
-
+cat <<EOL > "$tnlsys.toml"
+[server]# Local, IRAN
+bind_addr = "0.0.0.0:$pp"
+transport = "${protocol}"
+token = "${token}"
+channel_size = 2048
+keepalive_period = 75
+heartbeat = 40
+nodelay = true
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
+log_level = "info"
+${ports}
+EOL
 }
 Iran_bc() {
     clear
     cd
     cd backhaulconfs
-    read -p "Tunnel System Name : " tnlsys
+    echo "your current tunnel configs are:"
+    for file in *.toml; do
+        echo "${file%.toml}"
+    done
+    read -p "Your New Tunnel System Name : " tnlsys
     read -p "Enter Token : " token
     read -p "How many port mappings do you want to add?" port_count
     ports=$(IRAN_PORTS "$port_count")
@@ -64,6 +82,34 @@ IRAN_PORTS() {
     done
     echo "]"
 }
+
+create_backhaul_service() {
+    service_file="/etc/systemd/system/backhaul.service"
+
+    echo "[Unit]" > "$service_file"
+    echo "Description=Backhaul Reverse Tunnel Service" >> "$service_file"
+    echo "After=network.target" >> "$service_file"
+    echo "" >> "$service_file"
+    echo "[Service]" >> "$service_file"
+    echo "Type=simple" >> "$service_file"
+    echo "ExecStart=/root/backhaul -c /root/config.toml" >> "$service_file"
+    echo "Restart=always" >> "$service_file"
+    echo "RestartSec=3" >> "$service_file"
+    echo "LimitNOFILE=1048576" >> "$service_file"
+    echo "" >> "$service_file"
+    echo "[Install]" >> "$service_file"
+    echo "WantedBy=multi-user.target" >> "$service_file"
+
+    # Reload systemd daemon to recognize new service
+    systemctl daemon-reload
+
+    # Optionally enable and start the service
+    systemctl enable backhaul.service
+    systemctl start backhaul.service
+
+    echo "backhaul.service created and started."
+}
+
 
 Kharej_bc() {
     clear
@@ -106,6 +152,7 @@ pp=0
 token=0
 port_count=0
 ports=0
+tnlsys=1
 # Main menu
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${RED}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
