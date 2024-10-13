@@ -10,6 +10,7 @@ CORE(){
     clear
     if [ -e /usr/bin/backhaul ]; then
         echo -e ${GREEN}"installed"${NC}
+        read -n 1 -s -r -p "Press any key to continue"
     else
         echo -e ${RED}"Not installed"${NC}
         mkdir backhaul
