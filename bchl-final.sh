@@ -262,6 +262,8 @@ EOL
 
 Kharej_bc() {
     clear
+    cd
+    cd backhaulconfs
     protocol_selection
     read -p "Please enter Remote IP/domain : " remote_ip
     read -p "Your New Tunnel System Name : " tnlsys
@@ -327,6 +329,15 @@ UNINSTALL() {
 
 }
 
+Restart_Services() {
+    cd
+    cd backhaulconfs
+    for file in *.toml; do
+        temp="${file%.toml}"
+        sudo systemctl restart "$temp.service"
+    done    
+}
+
 protocol=cc
 pp=0
 token=0
@@ -344,7 +355,8 @@ clear
     echo "Menu:"
     echo "1  - Install Core"
     echo "2  - Setup Tunnel"
-   # echo "3  - Unistall"
+    echo "3  - Restart Services"
+   # echo "4  - Unistall"
     echo "0  - Exit"
     read -p "Enter your choice: " choice
     case $choice in
@@ -364,7 +376,8 @@ clear
                     *) echo "Invalid choice. Please enter a valid option.";;
                 esac
             done;;
-        3) UNINSTALL;;
+        3) Restart_Services;;
+        4) UNINSTALL;;
         0) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
     esac
