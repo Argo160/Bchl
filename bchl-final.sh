@@ -306,7 +306,7 @@ protocol_selection() {
             6) pp=8443
                 protocol=wssmux
                 break;;
-            0) Break;;    
+            0) break;;    
             *) echo "Invalid choice. Please enter a valid option.";;
         esac
     done
@@ -345,7 +345,7 @@ clear
                 case $tl_choice in
                     1) Iran_bc;;
                     2) Kharej_bc;;
-                    3) Break;;
+                    3) break;;
                     *) echo "Invalid choice. Please enter a valid option.";;
                 esac
             done;;
