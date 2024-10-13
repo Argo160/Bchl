@@ -312,6 +312,17 @@ protocol_selection() {
     done
 }
 
+UNINSTALL() {
+    cd /etc/systemd/system/
+    for file in *.toml; do
+        echo "${file%.toml}"
+    done
+    read -p "Name of the system to be deleted :" sysdel 
+    rm -rf backhaul "$sysdel.toml" /etc/systemd/system/"$sysdel.service"
+    sudo systemctl daemon-reload
+
+}
+
 protocol=cc
 pp=0
 token=0
