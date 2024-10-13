@@ -20,8 +20,9 @@ CORE(){
 Iran_bc() {
     clear
     protocol_selection
-    if [[ "$protocol" == "tcp" ]]; then
-        result="tcp"
+    if [ "$protocol" == "1" ] || [ "$protocol" == "2" ]; then
+#    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
+        tcp-ws
     elif [[ "$protocol" == "ws" ]]; then
         result="ws"
     elif [[ "$protocol" == "tcpmux" ]]; then
@@ -42,24 +43,24 @@ protocol_selection() {
         echo "1  - TCP"
         echo "2  - WS"
         echo "3  - WSS"
-        echo "4  - TCP Multiplexing"
-        echo "5  - WS Multiplexing"
-        echo "6  - WSS Multiplexing"
+        echo "4  - TCP MUX"
+        echo "5  - WS MUX"
+        echo "6  - WSS MUX"
         echo "0  - Return"
         read -p "Enter your choice: " protocol
         case $choice in
-            1) pp=3000
-                tcp-ws;;
-            2) pp=8080
-                tcp-ws;;
+            1) pp=3000;;
+                protocol=tcp;;
+            2) pp=8080;;
+                protocol=ws;;
             3) pp=8443
-                wss;;
+                protocol=wss;;
             4) pp=3000
-                tcp-ws-mtpl;;
+                protocol=tcpmux;;
             5) pp=8080
-                tcp-ws-mtpl;;
+                protocol=wsmux;;
             6) pp=8443
-                wss-mtpl;;
+                protocol=wssmux;;
             0) Break;;    
             *) echo "Invalid choice. Please enter a valid option.";;
         esac
