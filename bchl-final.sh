@@ -81,6 +81,9 @@ EOL
 
 wss() {
     clear
+    read -p "your cert file path: " crtpath
+    read -p "your key file path: " keypath
+    
 cat <<EOL > "$bchlName"
 [server]# Local, IRAN
 bind_addr = "0.0.0.0:$pp"
@@ -105,6 +108,9 @@ EOL
 
 wssmux() {
     clear
+    read -p "your cert file path: " crtpath
+    read -p "your key file path: " keypath
+    
 cat <<EOL > "$bchlName"
 [server]# Local, IRAN
 bind_addr = "0.0.0.0:$pp"
@@ -136,8 +142,6 @@ EOL
 Iran_bc() {
     clear
     echo "If you need wss then before running this script make sure of having tls files ready"
-    read -p "your cert file path: " crtpath
-    read -p "your key file path: " keypath
     cd
     cd backhaulconfs
     echo "your current tunnel configs are:"
@@ -151,7 +155,6 @@ Iran_bc() {
     ports=$(IRAN_PORTS "$port_count")
     protocol_selection
     if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ]; then
-#    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
         tcp-ws
     elif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ]; then
         tcpws-mux
