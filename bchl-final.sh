@@ -267,7 +267,7 @@ Kharej_bc() {
     if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ] || [ "$protocol" == "wss" ]; then
 #    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
         tcp-ws-wss-kh
-    eliif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ] || [ "$protocol" == "wssmux" ]; then
+    elif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ] || [ "$protocol" == "wssmux" ]; then
         tcpws-mux-kh
     else
         result="Invalid choice. Please choose between tcp, ws, or tcpmux."
