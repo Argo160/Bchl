@@ -24,7 +24,7 @@ CORE(){
     fi
 }
 tcp-ws() {
-cat <<EOL > "$tnlsys.toml"
+cat <<EOL > $bchlName
 [server]# Local, IRAN
 bind_addr = "0.0.0.0:$pp"
 transport = "${protocol}"
@@ -39,6 +39,9 @@ sniffer_log = "/root/backhaul.json"
 log_level = "info"
 ${ports}
 EOL
+
+    backhaul -c config.toml
+    create_backhaul_service
 }
 Iran_bc() {
     clear
@@ -49,6 +52,7 @@ Iran_bc() {
         echo "${file%.toml}"
     done
     read -p "Your New Tunnel System Name : " tnlsys
+    bchlName="$tnlsys.toml"
     read -p "Enter Token : " token
     read -p "How many port mappings do you want to add?" port_count
     ports=$(IRAN_PORTS "$port_count")
@@ -84,7 +88,7 @@ IRAN_PORTS() {
 }
 
 create_backhaul_service() {
-    service_file="/etc/systemd/system/backhaul.service"
+    service_file="/etc/systemd/system/$tnlsys.service"
 
     echo "[Unit]" > "$service_file"
     echo "Description=Backhaul Reverse Tunnel Service" >> "$service_file"
@@ -92,7 +96,7 @@ create_backhaul_service() {
     echo "" >> "$service_file"
     echo "[Service]" >> "$service_file"
     echo "Type=simple" >> "$service_file"
-    echo "ExecStart=/root/backhaul -c /root/config.toml" >> "$service_file"
+    echo "ExecStart=/root/backhaul -c /root/backhaulconfs/$bchlName" >> "$service_file"
     echo "Restart=always" >> "$service_file"
     echo "RestartSec=3" >> "$service_file"
     echo "LimitNOFILE=1048576" >> "$service_file"
@@ -152,7 +156,8 @@ pp=0
 token=0
 port_count=0
 ports=0
-tnlsys=1
+tnlsys=0
+bchlName=z.toml
 # Main menu
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${RED}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
