@@ -206,8 +206,8 @@ create_backhaul_service() {
     systemctl daemon-reload
 
     # Optionally enable and start the service
-    systemctl enable backhaul.service
-    systemctl start backhaul.service
+    systemctl enable "$service_file"
+    systemctl start "$service_file"
 
     echo "backhaul.service created and started."
 }
