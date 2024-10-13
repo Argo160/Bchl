@@ -316,9 +316,10 @@ UNINSTALL() {
     cd /etc/systemd/system/
     for file in *.toml; do
         echo "${file%.toml}"
+        rm -rf /etc/systemd/system/"$file.service"
     done
     read -p "Name of the system to be deleted :" sysdel 
-    rm -rf backhaul "$sysdel.toml" /etc/systemd/system/"$sysdel.service"
+    rm -rf backhaul /root/backhaulconfs "$sysdel.toml" 
     sudo systemctl daemon-reload
 
 }
@@ -360,7 +361,7 @@ clear
                     *) echo "Invalid choice. Please enter a valid option.";;
                 esac
             done;;
-        3) UNINSTALL;;
+        3) #UNINSTALL;;
         0) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
     esac
