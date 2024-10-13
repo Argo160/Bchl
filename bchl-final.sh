@@ -287,9 +287,9 @@ protocol_selection() {
         echo "0  - Return"
         read -p "Enter your choice: " protocol
         case $choice in
-            1) pp=3000;;
+            1) pp=3000
                 protocol=tcp;;
-            2) pp=8080;;
+            2) pp=8080
                 protocol=ws;;
             3) pp=8443
                 protocol=wss;;
