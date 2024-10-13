@@ -286,8 +286,8 @@ protocol_selection() {
         echo "5  - WS MUX"
         echo "6  - WSS MUX"
         echo "0  - Return"
-        read -p "Enter your choice: " protocol
-        case $choice in
+        read -p "Enter your choice: " protocoll
+        case $protocoll in
             1) pp=3000
                 protocol=tcp
                 break;;
