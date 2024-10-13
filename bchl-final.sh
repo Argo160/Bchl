@@ -17,10 +17,16 @@ CORE(){
     echo $'\e[32m Backhaul Core in 3 seconds... \e[0m' && sleep 1 && echo $'\e[32m2... \e[0m' && sleep 1 && echo $'\e[32m1... \e[0m' && sleep 1 && {
     }    
 }
+tcp-ws() {
+
+}
 Iran_bc() {
     clear
+    read -p "Enter Token : " token
+    read -p "How many port mappings do you want to add?" port_count
+    ports=$(IRAN_PORTS "$port_count")
     protocol_selection
-    if [ "$protocol" == "1" ] || [ "$protocol" == "2" ]; then
+    if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ]; then
 #    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
         tcp-ws
     elif [[ "$protocol" == "ws" ]]; then
@@ -31,6 +37,25 @@ Iran_bc() {
         result="Invalid choice. Please choose between tcp, ws, or tcpmux."
     fi    
 }
+
+IRAN_PORTS() {
+    ports=()
+    for ((i=1; i<=$1; i++))
+    do
+        read -p "Enter LocalPort for mapping $i: " local_port
+
+        read -p "Enter RemotePort for mapping $i: " remote_port
+
+        ports+=("$local_port=$remote_port")
+    done
+    echo "ports = ["
+    for port in "${ports[@]}"
+    do
+        echo "   \"$port\","
+    done
+    echo "]"
+}
+
 Kharej_bc() {
     clear
     protocol_selection
@@ -69,6 +94,9 @@ protocol_selection() {
 
 protocol=cc
 pp=0
+token=0
+port_count=0
+ports=0
 # Main menu
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${RED}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
