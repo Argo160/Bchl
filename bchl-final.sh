@@ -289,17 +289,23 @@ protocol_selection() {
         read -p "Enter your choice: " protocol
         case $choice in
             1) pp=3000
-                protocol=tcp;;
+                protocol=tcp
+                break;;
             2) pp=8080
-                protocol=ws;;
+                protocol=ws
+                break;;
             3) pp=8443
-                protocol=wss;;
+                protocol=wss
+                break;;
             4) pp=3000
-                protocol=tcpmux;;
+                protocol=tcpmux
+                break;;
             5) pp=8080
-                protocol=wsmux;;
+                protocol=wsmux
+                break;;
             6) pp=8443
-                protocol=wssmux;;
+                protocol=wssmux
+                break;;
             0) Break;;    
             *) echo "Invalid choice. Please enter a valid option.";;
         esac
