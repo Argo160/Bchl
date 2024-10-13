@@ -23,6 +23,7 @@ CORE(){
         clear
     fi
 }
+
 tcp-ws() {
 cat <<EOL > $bchlName
 [server]# Local, IRAN
@@ -43,6 +44,34 @@ EOL
     backhaul -c config.toml
     create_backhaul_service
 }
+
+tcpws-mux() {
+    clear
+cat <<EOL > $bchlName
+[server]# Local, IRAN
+bind_addr = "0.0.0.0:$pp"
+transport = "${protocol}"
+token = "${token}"
+channel_size = 2048
+keepalive_period = 75
+heartbeat = 40
+nodelay = true
+mux_con = 8
+mux_version = 1
+mux_framesize = 32768 
+mux_recievebuffer = 4194304
+mux_streambuffer = 65536 
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
+log_level = "info"
+${ports}
+EOL
+
+    backhaul -c config.toml
+    create_backhaul_service    
+}
+
 Iran_bc() {
     clear
     cd
@@ -60,8 +89,8 @@ Iran_bc() {
     if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ]; then
 #    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
         tcp-ws
-    elif [[ "$protocol" == "ws" ]]; then
-        result="ws"
+    eliif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ]; then
+        tcpws-mux
     elif [[ "$protocol" == "tcpmux" ]]; then
         result="tcpmux"
     else
