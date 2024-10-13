@@ -2,26 +2,35 @@
 
 CORE(){
     clear
-    mkdir backhaul
-    cd backhaul
-    if [[ "$(uname -m)" == "x86_64" ]]; then
-        wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz -O backhaul_linux.tar.gz
-    elif [[ "$(uname -m)" == "aarch64" ]]; then
-        wget https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz -O backhaul_linux.tar.gz
-    fi    
-    tar -xzvf backhaul_linux.tar.gz
-    rm backhaul_linux.tar.gz
-    chmod +x backhaul
-    mv backhaul /usr/bin/backhaul
-    clear
-    echo $'\e[32m Backhaul Core in 3 seconds... \e[0m' && sleep 1 && echo $'\e[32m2... \e[0m' && sleep 1 && echo $'\e[32m1... \e[0m' && sleep 1 && {
-    }    
+    if [ -e /usr/bin/backhaul ]; then
+        echo -e ${GREEN}"installed"${NC}
+    else
+        echo -e ${RED}"Not installed"${NC}
+        mkdir backhaul
+        cd backhaul
+        if [[ "$(uname -m)" == "x86_64" ]]; then
+            wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz -O backhaul_linux.tar.gz
+        elif [[ "$(uname -m)" == "aarch64" ]]; then
+            wget https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz -O backhaul_linux.tar.gz
+        fi    
+        tar -xzvf backhaul_linux.tar.gz
+        rm backhaul_linux.tar.gz
+        chmod +x backhaul
+        mv backhaul /usr/bin/backhaul
+        cd
+        mkdir backhaulconfs
+        cd backhaulconfs
+        clear
+    fi
 }
 tcp-ws() {
 
 }
 Iran_bc() {
     clear
+    cd
+    cd backhaulconfs
+    read -p "Tunnel System Name : " tnlsys
     read -p "Enter Token : " token
     read -p "How many port mappings do you want to add?" port_count
     ports=$(IRAN_PORTS "$port_count")
