@@ -202,10 +202,70 @@ create_backhaul_service() {
     echo "backhaul.service created and started."
 }
 
+tcp-ws-wss-kh() {
+cat <<EOL > "$bchlName"
+[client]
+remote_addr = "${remote_ip}:$pp"
+transport = "${protocol}"
+token = "${token}"
+connection_pool = 8
+keepalive_period = 75
+dial_timeout = 10
+retry_interval = 3
+nodelay = true
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
+log_level = "info"
+EOL
+
+    backhaul -c "$bchlName"
+    create_backhaul_service
+}
+
+tcpws-mux-kh() {
+cat <<EOL > "$bchlName"
+[client]
+remote_addr = "${remote_ip}:$pp"
+transport = "${protocol}"
+token = "${token}"
+connection_pool = 8
+keepalive_period = 75
+dial_timeout = 10
+retry_interval = 3
+nodelay = true
+mux_version = 1
+mux_framesize = 32768 
+mux_recievebuffer = 4194304
+mux_streambuffer = 65536  
+sniffer = false 
+web_port = 2060
+sniffer_log = "/root/backhaul.json"
+log_level = "info"
+EOL
+
+    backhaul -c "$bchlName"
+    create_backhaul_service
+
+
+}
 
 Kharej_bc() {
     clear
     protocol_selection
+    read -p "Please enter Remote IP/domain : " remote_ip
+    read -p "Your New Tunnel System Name : " tnlsys
+    bchlName="$tnlsys.toml"
+    read -p "Enter Token : " token
+    
+    if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ] || [ "$protocol" == "wss" ]; then
+#    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
+        tcp-ws-wss-kh
+    eliif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ] || [ "$protocol" == "wssmux" ]; then
+        tcpws-mux-kh
+    else
+        result="Invalid choice. Please choose between tcp, ws, or tcpmux."
+    fi        
 }
 protocol_selection() {
     clear
