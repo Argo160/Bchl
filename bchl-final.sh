@@ -1,3 +1,5 @@
+#!/bin/bash
+
 CORE(){
     clear
     mkdir backhaul
@@ -18,6 +20,15 @@ CORE(){
 Iran_bc() {
     clear
     protocol_selection
+    if [[ "$protocol" == "tcp" ]]; then
+        result="tcp"
+    elif [[ "$protocol" == "ws" ]]; then
+        result="ws"
+    elif [[ "$protocol" == "tcpmux" ]]; then
+        result="tcpmux"
+    else
+        result="Invalid choice. Please choose between tcp, ws, or tcpmux."
+    fi    
 }
 Kharej_bc() {
     clear
@@ -38,11 +49,17 @@ protocol_selection() {
         read -p "Enter your choice: " protocol
         case $choice in
             1) pp=3000
-            2) pp=8080    
+                tcp-ws;;
+            2) pp=8080
+                tcp-ws;;
             3) pp=8443
-            4) pp=3000    
+                wss;;
+            4) pp=3000
+                tcp-ws-mtpl;;
             5) pp=8080
-            6) pp=8443    
+                tcp-ws-mtpl;;
+            6) pp=8443
+                wss-mtpl;;
             0) Break;;    
             *) echo "Invalid choice. Please enter a valid option.";;
         esac
