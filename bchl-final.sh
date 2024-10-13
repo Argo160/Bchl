@@ -152,7 +152,7 @@ Iran_bc() {
     if [ "$protocol" == "tcp" ] || [ "$protocol" == "ws" ]; then
 #    if [[ "$protocol" == "tcp" || "$protocol" == "ws" ]]; then
         tcp-ws
-    eliif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ]; then
+    elif [ "$protocol" == "tcpmux" ] || [ "$protocol" == "wsmux" ]; then
         tcpws-mux
     elif [[ "$protocol" == "wss" ]]; then
         wss
