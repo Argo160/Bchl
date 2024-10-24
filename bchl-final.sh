@@ -16,14 +16,14 @@ CORE(){
         mkdir backhaul
         cd backhaul
         if [[ "$(uname -m)" == "x86_64" ]]; then
-            wget https://github.com/Musixal/Backhaul/releases/download/v0.1.1/backhaul_linux_amd64.tar.gz -O backhaul_linux.tar.gz
+            wget https://github.com/Musixal/Backhaul/releases/download/v0.6.2/backhaul_linux_amd64.tar.gz -O backhaul_linux.tar.gz
         elif [[ "$(uname -m)" == "aarch64" ]]; then
-            wget https://github.com/Musixal/Backhaul/releases/download/v0.4.5/backhaul_linux_arm64.tar.gz -O backhaul_linux.tar.gz
+            wget https://github.com/Musixal/Backhaul/releases/download/v0.6.2/backhaul_linux_arm64.tar.gz -O backhaul_linux.tar.gz
         fi    
         tar -xzvf backhaul_linux.tar.gz
         rm backhaul_linux.tar.gz
-        chmod +x backhaul
-        mv backhaul /usr/bin/backhaul
+        #chmod +x backhaul
+        #mv backhaul /usr/bin/backhaul
         cd
         mkdir backhaulconfs
         cd backhaulconfs
